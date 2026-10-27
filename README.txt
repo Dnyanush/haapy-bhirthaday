@@ -9,16 +9,15 @@ HOW TO OPEN IN VS CODE
 6. Right-click index.html and choose "Open with Live Server" if you have the Live Server extension.
    Or double-click index.html to open it directly in your browser.
 
-PERSONALISE YOUR FRIEND'S NAME
-1. Open script.js.
-2. At the top, change:
-   const FRIEND_NAME = "Bestie";
-   to (for example):
-   const FRIEND_NAME = "Ananya";
-3. Save the file and refresh the browser.
+PERSONALISE YOUR FRIEND'S NAME AND MESSAGE
+Add URL parameters when you open the page. For example:
+   index.html?name=Ananya&message=You%20are%20my%20favorite%20person
+Use %20 for spaces in the message.
 
 NOTES
 - The cake and visual effects are made with CSS, so no installation or build tools are needed.
 - The layout works on mobile and desktop.
 - Google Fonts need an internet connection; the site still works without them using fallback fonts.
-- The music button currently shows a friendly note. To play a song, add a music file and connect it to an audio element (only use music you have permission to use).
+- The page attempts to autoplay a synthesized version of the traditional "Happy Birthday" tune. If the browser blocks autoplay, tap the music button to start it.
+- The page launches decorative balloons on open. Visitors can disable animation using their device's reduced-motion accessibility setting.
+- Browsers and mobile devices control autoplay permissions; a website cannot override those settings.

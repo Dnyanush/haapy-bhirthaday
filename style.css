@@ -60,4 +60,23 @@ footer{text-align:center;padding:28px 15px 35px;color:#8f809f;font-size:9px;lett
 @keyframes floaty{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(8deg)}}
 @keyframes heartbeat{0%,100%{transform:scale(1)}15%{transform:scale(1.15)}30%{transform:scale(1)}45%{transform:scale(1.1)}}
 @keyframes burst{0%{transform:translate(0,0) scale(.5) rotate(0);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1.3) rotate(220deg);opacity:0}}
+@keyframes cakeFloat{0%,100%{transform:rotateX(7deg) rotateY(-8deg) translateY(0)}50%{transform:rotateX(9deg) rotateY(-2deg) translateY(-8px)}}
+@keyframes flame{0%{transform:scaleY(.85) translateY(0);opacity:.9}100%{transform:scaleY(1.25) translateY(-4px);opacity:1}}
+@keyframes twinkle{0%,100%{opacity:.3;transform:scale(.9)}50%{opacity:1;transform:scale(1.2)}}
+
+.sparkle{position:fixed;left:50%;top:50%;pointer-events:none;z-index:30;animation:burst 1.25s ease-out forwards;user-select:none}
+.background-star{position:absolute;display:inline-block;color:#f6d0ff;animation:twinkle 3.2s ease-in-out infinite;font-size:14px;opacity:.7}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(16px);background:rgba(24,15,38,.88);border:1px solid rgba(255,255,255,.14);color:#fff7fe;padding:12px 18px;border-radius:999px;box-shadow:0 12px 32px rgba(0,0,0,.32);font-size:12px;letter-spacing:.25px;opacity:0;transition:opacity .25s ease,transform .25s ease;z-index:80;pointer-events:none;max-width:min(90vw,440px);text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.music-button.is-playing{background:rgba(255,127,194,.2);border-color:rgba(255,162,217,.7);box-shadow:0 0 0 1px rgba(255,162,217,.3),0 0 22px rgba(255,120,188,.18)}
+.birthday-balloon{position:fixed;bottom:-110px;width:42px;height:54px;border-radius:50% 50% 46% 46%;z-index:25;pointer-events:none;opacity:0;box-shadow:inset -7px -5px 12px #0002,inset 7px 7px 12px #ffffff45;animation:balloon-rise 7s ease-in forwards}
+.birthday-balloon:before{content:"";position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);border-left:5px solid transparent;border-right:5px solid transparent;border-top:8px solid currentColor}
+.birthday-balloon:after{content:"";position:absolute;left:50%;top:100%;height:62px;border-left:1px solid #ffffff80;transform:translateX(-50%)}
+.balloon-pink{background:radial-gradient(circle at 30% 25%,#fff9,#ff83bb 65%,#e54e99);color:#e54e99}
+.balloon-lilac{background:radial-gradient(circle at 30% 25%,#fff9,#c4a4ff 65%,#8d69dc);color:#8d69dc}
+.balloon-peach{background:radial-gradient(circle at 30% 25%,#fff9,#ffc18c 65%,#f28a63);color:#f28a63}
+.balloon-blue{background:radial-gradient(circle at 30% 25%,#fff9,#8ed9ff 65%,#59a8dd);color:#59a8dd}
+.balloon-yellow{background:radial-gradient(circle at 30% 25%,#fff9,#ffe68a 65%,#e7bf47);color:#e7bf47}
+@keyframes balloon-rise{0%{transform:translate3d(0,0,0) rotate(-5deg);opacity:0}10%{opacity:.95}50%{transform:translate3d(var(--drift),-55vh,0) rotate(var(--spin));opacity:.95}100%{transform:translate3d(calc(var(--drift)*-0.7),-115vh,0) rotate(calc(var(--spin)*-1));opacity:0}}
+@media(prefers-reduced-motion:reduce){.birthday-balloon{bottom:auto;animation:none;opacity:.95}.birthday-balloon.balloon-still{transform:rotate(-4deg)}}
 @media(max-width:650px){.topbar{height:70px;padding:0 18px}.brand{font-size:9px;letter-spacing:1.4px}.music-button{padding:9px 11px}.music-button span{display:none}.hero{padding:55px 0 65px}h1{letter-spacing:-1.6px}.intro{font-size:13px}.cake-scene{height:295px;transform:scale(.9);margin:4px auto -5px}.message-card{padding:27px 23px;gap:15px;margin-bottom:75px}.card-icon{flex-basis:43px;height:43px;font-size:20px;border-radius:14px}.message-card h2{font-size:27px}.memory-grid{grid-template-columns:1fr;gap:12px}.memory-card{min-height:0;padding:22px}.memory-emoji{margin-bottom:12px}.memories{padding-bottom:75px}.desktop-only{display:none}}
