@@ -248,3 +248,76 @@ footer{text-align:center;padding:28px 15px 35px;color:#8f809f;font-size:9px;lett
 @keyframes birthday-heading-glow{0%,100%{text-shadow:0 8px 35px #e957a51c}50%{text-shadow:0 8px 45px #f26cb766,0 0 24px #b58bff3d}}
 @keyframes name-shimmer{0%,100%{background-position:0% center;filter:drop-shadow(0 0 12px #f27abd44)}50%{background-position:100% center;filter:drop-shadow(0 0 24px #f27abd99)}}
 @media(prefers-reduced-motion:reduce){.hero h1{animation:none}.hero h1 #friendName{animation:none;background-position:center;filter:none}}
+
+.birthday-photo-background{overflow:hidden;background:linear-gradient(180deg,rgba(13,8,24,.62),rgba(13,8,24,.84)),radial-gradient(ellipse at 50% 30%,transparent 10%,rgba(9,6,19,.42) 100%),url("birthday-background.png") center 48%/cover no-repeat;opacity:.72}
+.birthday-photo-background:after{content:"";position:absolute;inset:-12%;pointer-events:none;background:radial-gradient(ellipse at 18% 28%,rgba(255,111,190,.25),transparent 36%),radial-gradient(ellipse at 78% 36%,rgba(147,114,255,.25),transparent 38%),radial-gradient(ellipse at 53% 82%,rgba(93,189,223,.15),transparent 42%);filter:blur(34px);mix-blend-mode:screen;animation:background-aurora 28s ease-in-out infinite alternate}
+@keyframes background-aurora{0%{transform:translate3d(-2%,-1%,0) scale(1);opacity:.62}50%{transform:translate3d(1%,2%,0) scale(1.06);opacity:.92}100%{transform:translate3d(2%,-1%,0) scale(1.02);opacity:.7}}
+.hero{isolation:isolate;padding-top:48px}
+.hero:before{content:"";position:absolute;z-index:-1;inset:5% -12% 2%;border-radius:50%;background:radial-gradient(ellipse at center,rgba(111,63,137,.25),rgba(50,27,73,.1) 48%,transparent 74%);filter:blur(16px);pointer-events:none}
+.hero h1{font-size:clamp(44px,7vw,78px);margin-top:19px}
+.cake-scene{height:285px}
+.hero h1 .birthday-greeting{display:inline-block;background-image:linear-gradient(105deg,#fff1f8 0%,#ffb1d6 24%,#ff70b8 48%,#c9a8ff 72%,#fff1f8 100%);background-size:230% auto;background-position:0% center;-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 15px #f27abd55);animation:greeting-shimmer 4s ease-in-out infinite}
+@keyframes greeting-shimmer{0%,100%{background-position:0% center;filter:drop-shadow(0 0 12px #f27abd44)}50%{background-position:100% center;filter:drop-shadow(0 0 23px #f27abd99)}}
+.cake{transition:transform 180ms ease-out}
+.memory-card{position:relative;overflow:hidden}
+.memory-card:after{content:"";position:absolute;top:-35%;left:-85%;width:45%;height:180%;transform:rotate(24deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);pointer-events:none;transition:left .7s ease}
+.memory-card:hover:after{left:145%}
+.gift-box-button:hover .gift-box,.gift-box-button:focus-visible .gift-box{transform:translateY(-8px) rotate(-5deg) scale(1.04)}
+.gift-box-button:active .gift-box{transform:translateY(0) scale(.97)}
+@media(max-width:650px){.hero{padding-top:42px}.hero h1{font-size:clamp(42px,11vw,62px)}.cake-scene{height:275px}}
+@media(prefers-reduced-motion:reduce){.cake{transition:none}.memory-card:after{display:none}.birthday-photo-background:after{animation:none;transform:none}.hero h1 .birthday-greeting{animation:none;background-position:center;filter:none}}
+
+.cake{animation:cake-showcase 6s ease-in-out infinite,cake-pink-glow 3.8s ease-in-out infinite;filter:drop-shadow(0 24px 24px #03010a70)}
+.cake-bottom{background:linear-gradient(90deg,#9e1555,#d92e78 45%,#ad1d60);border-bottom-color:#74113f;box-shadow:inset 0 -10px 0 #00000018,inset 0 7px 0 #ffffff35,0 8px 18px #9e155533}
+.cake-middle{background:linear-gradient(90deg,#bd246c,#ed4b91 48%,#c82b75);border-bottom-color:#92164f}
+.cake-top{background:radial-gradient(ellipse at 38% 25%,#ffb0d1,#ed4a91 72%);color:#8f164c;box-shadow:inset 0 -8px 0 #a9215c44,inset 0 7px 0 #ffffff45,0 0 24px #f0448a33}
+.cake-top:after{background:linear-gradient(90deg,#fff8,transparent)}
+.cake-top span{color:#8f164c;text-shadow:0 0 12px #fff5}
+@keyframes cake-pink-glow{0%,100%{filter:drop-shadow(0 22px 22px #03010a70) drop-shadow(0 0 5px #ed4a9144)}50%{filter:drop-shadow(0 24px 25px #03010a70) drop-shadow(0 0 18px #ed4a9188)}}
+@media(prefers-reduced-motion:reduce){.cake{animation:none;filter:drop-shadow(0 24px 24px #03010a70)}}
+
+.gift-box{width:142px;height:138px;transform:rotateX(-8deg) rotateY(-14deg);transform-style:preserve-3d;filter:drop-shadow(0 20px 19px #08030d8c);animation:gift-box-float 4.2s ease-in-out infinite}
+.gift-box:after{content:"";position:absolute;z-index:-1;left:16px;right:9px;bottom:1px;height:18px;border-radius:50%;background:#0008;filter:blur(12px);transform:rotateX(70deg);transition:opacity .4s,transform .4s}
+.gift-box-lid{z-index:3;left:1px;top:24px;width:132px;height:52px;border:0;border-radius:0;background:linear-gradient(110deg,#a91914 0 49.5%,#d83226 50%);clip-path:polygon(50% 0,100% 32%,100% 67%,50% 100%,0 67%,0 32%);box-shadow:none;transform-origin:50% 72%;transition:transform .68s cubic-bezier(.2,.75,.3,1)}
+.gift-box-lid:after{content:"";position:absolute;inset:2px 6px 12px;background:linear-gradient(110deg,#d9362a 0 49.5%,#f04a35 50%);clip-path:polygon(50% 0,100% 38%,50% 78%,0 38%)}
+.gift-box-body{left:16px;top:49px;width:110px;height:83px;border:0;border-radius:0;background:linear-gradient(110deg,#a81813 0 49.5%,#ce291f 50%);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);box-shadow:none;transform:translateZ(-4px)}
+.gift-box-body:after{content:"";position:absolute;inset:4px 7px 8px;background:linear-gradient(110deg,#d02b21 0 49.5%,#a81713 50%);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);opacity:.28}
+.gift-box-ribbon{z-index:4;left:0;top:24px;width:142px;height:108px;border-radius:0;background:linear-gradient(90deg,#a97814,#ffe995 22%,#fff0ae 48%,#c49120 54%,#fff0ae 78%,#b77f14);clip-path:polygon(46% 0,54% 0,54% 15%,100% 31%,100% 38%,54% 55%,54% 100%,46% 100%,46% 55%,0 38%,0 31%,46% 15%);box-shadow:0 0 10px #ffe99555}
+.gift-box-bow{z-index:5;left:47px;top:3px;width:49px;height:43px;border:0;border-radius:0;transform:rotate(-8deg);box-shadow:none;transition:transform .68s cubic-bezier(.2,.75,.3,1)}
+.gift-bow-loop{position:absolute;top:7px;width:24px;height:17px;border:3px solid #fff0a5;border-radius:80% 18% 80% 25%;background:linear-gradient(135deg,#fff1ad 5%,#c39020 46%,#ffea8b 75%,#9b6811);box-shadow:inset 0 0 0 1px #fff8,0 3px 6px #693d1670}
+.gift-bow-loop-left{left:0;transform:rotate(24deg)}
+.gift-bow-loop-right{right:0;transform:scaleX(-1) rotate(24deg)}
+.gift-bow-tail{position:absolute;top:23px;width:13px;height:20px;background:linear-gradient(90deg,#b47c13,#ffef9a 48%,#c18a19);clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%)}
+.gift-bow-tail-left{left:12px;transform:rotate(13deg)}
+.gift-bow-tail-right{right:12px;transform:rotate(-13deg)}
+.gift-bow-knot{position:absolute;z-index:1;left:19px;top:10px;width:12px;height:12px;border:1px solid #fff2a4;border-radius:45%;background:radial-gradient(circle at 35% 30%,#fff4bf,#d8a52f 70%,#98630e);box-shadow:0 1px 5px #663e18aa}
+.gift-box-button:hover:not(.is-open):not(.is-opening) .gift-box,.gift-box-button:focus-visible:not(.is-open):not(.is-opening) .gift-box{transform:translateY(-7px) rotateX(-10deg) rotateY(-22deg) rotateZ(-2deg) scale(1.05);filter:drop-shadow(0 24px 24px #08030d99)}
+.gift-box-button:hover:not(.is-open):not(.is-opening) .gift-box:after,.gift-box-button:focus-visible:not(.is-open):not(.is-opening) .gift-box:after{opacity:.7;transform:rotateX(70deg) scale(.9)}
+.gift-box-button:hover:not(.is-open):not(.is-opening) .gift-box-lid{transform:translate3d(0,-5px,4px) rotateX(10deg) rotateZ(-2deg)}
+.gift-box-button.is-opening .gift-box{animation:gift-box-pop .76s cubic-bezier(.2,.8,.25,1.2) both}
+.gift-box-button.is-open .gift-box{animation:none}
+.gift-box-button.is-opening .gift-box-lid,.gift-box-button.is-open .gift-box-lid{transform:translate3d(0,-25px,31px) rotateX(-125deg) rotateZ(-8deg)}
+.gift-box-button.is-opening .gift-box-bow,.gift-box-button.is-open .gift-box-bow{transform:translate3d(0,-28px,32px) rotate(-78deg)}
+.gift-box-button.is-opening .gift-box-body,.gift-box-button.is-open .gift-box-body{filter:brightness(1.2)}
+.gift-box-button.is-open .gift-box{transform:rotateX(-8deg) rotateY(-14deg)}
+@keyframes gift-box-float{0%,100%{translate:0 0}50%{translate:0 -8px}}
+@keyframes gift-box-pop{0%,100%{transform:rotateX(-8deg) rotateY(-14deg) translateY(0) scale(1)}35%{transform:rotateX(-12deg) rotateY(-20deg) translateY(-12px) scale(1.05) rotateZ(-2deg)}65%{transform:rotateX(-5deg) rotateY(-8deg) translateY(2px) scale(.98)}}
+@media(prefers-reduced-motion:reduce){.gift-box,.gift-box-button.is-opening .gift-box{animation:none;translate:0 0}.gift-box-lid,.gift-box-bow{transition:none}.gift-box:after{transition:none}.gift-box-button:hover:not(.is-open):not(.is-opening) .gift-box,.gift-box-button:focus-visible:not(.is-open):not(.is-opening) .gift-box{transform:rotateX(-8deg) rotateY(-14deg)}}
+
+.hero-actions #wishButton{animation:wish-button-glow 3.2s ease-in-out infinite}
+.hero-actions #wishButton b{display:inline-block;animation:wish-star-twinkle 2s ease-in-out infinite}
+.hero-actions #blowButton{animation:candle-button-glow 3.6s ease-in-out infinite}
+.blow-icon{display:inline-block;transform-origin:50% 100%;animation:candle-icon-flicker 1s ease-in-out infinite alternate}
+.cake-knife{position:absolute;z-index:6;left:calc(50% + 107px);top:48%;width:82px;height:26px;opacity:0;pointer-events:none;filter:drop-shadow(0 5px 8px #0008);transform:translate(24px,35px) rotate(-35deg) scale(.7);transform-origin:10% 50%}
+.cake-knife-blade{fill:url(#knife-metal);stroke:#fff9;stroke-width:.7}
+.cake-knife-handle{fill:#81234c;stroke:#ffc0d9;stroke-width:.8}
+.cake-knife-rivet{fill:#ffe9a8}
+.cake-scene.cake-cut-ready:not(.cake-cut-complete) .cake-knife{animation:knife-arrive 1s cubic-bezier(.2,.8,.25,1.15) .15s both,knife-glint 2.2s ease-in-out 1.2s infinite}
+@keyframes wish-button-glow{0%,100%{box-shadow:0 10px 30px #d45dbd3b,inset 0 1px #ffffff70}50%{box-shadow:0 12px 38px #f274bd77,0 0 0 5px #f274bd12,inset 0 1px #ffffff90}}
+@keyframes wish-star-twinkle{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(25deg) scale(1.22)}}
+@keyframes candle-button-glow{0%,100%{border-color:#ffffff24;box-shadow:0 0 0 0 #ff9dcc00}50%{border-color:#ff9dcc88;box-shadow:0 0 20px #ff82bd26}}
+@keyframes candle-icon-flicker{from{transform:rotate(-5deg) scale(.96)}to{transform:rotate(5deg) scale(1.06)}}
+@keyframes knife-arrive{0%{opacity:0;transform:translate(24px,35px) rotate(-35deg) scale(.7)}70%{opacity:1;transform:translate(-5px,0) rotate(-17deg) scale(1.05)}100%{opacity:1;transform:translate(0,0) rotate(-22deg) scale(1)}}
+@keyframes knife-glint{0%,100%{filter:drop-shadow(0 5px 8px #0008)}50%{filter:drop-shadow(0 0 10px #fff3) drop-shadow(0 5px 8px #0008)}}
+@media(max-width:650px){.cake-knife{left:calc(50% + 85px);width:68px;height:22px}}
+@media(prefers-reduced-motion:reduce){.hero-actions #wishButton,.hero-actions #wishButton b,.hero-actions #blowButton,.blow-icon{animation:none}.cake-scene.cake-cut-ready:not(.cake-cut-complete) .cake-knife{animation:none;opacity:1;transform:rotate(-22deg)}}

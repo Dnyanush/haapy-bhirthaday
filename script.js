@@ -34,6 +34,7 @@ let isMusicOn = false;
 let surpriseIndex = -1;
 let autoplayFallbackRegistered = false;
 let cakeCutUnlocked = false;
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 function showToast(message) {
   toast.textContent = message;
@@ -156,6 +157,9 @@ function cutBirthdayCake() {
   }
   if (birthdayCake.classList.contains("is-cut")) return;
 
+  birthdayCake.style.removeProperty("transform");
+  cakeScene.classList.remove("cake-cut-ready");
+  cakeScene.classList.add("cake-cut-complete");
   birthdayCake.classList.add("is-cut");
   birthdayCake.setAttribute("aria-label", "Birthday cake has been cut.");
   birthdayCake.setAttribute("aria-pressed", "true");
@@ -172,6 +176,16 @@ birthdayCake.addEventListener("keydown", (event) => {
   event.preventDefault();
   cutBirthdayCake();
 });
+
+cakeScene.addEventListener("pointermove", (event) => {
+  if (prefersReducedMotion || event.pointerType === "touch" || birthdayCake.classList.contains("is-cut")) return;
+
+  const bounds = cakeScene.getBoundingClientRect();
+  const horizontal = (event.clientX - bounds.left) / bounds.width - 0.5;
+  const vertical = (event.clientY - bounds.top) / bounds.height - 0.5;
+  birthdayCake.style.transform = `rotateX(${7 - vertical * 8}deg) rotateY(${-8 + horizontal * 18}deg) translateY(-4px)`;
+});
+cakeScene.addEventListener("pointerleave", () => birthdayCake.style.removeProperty("transform"));
 
 candles.forEach((candle, index) => {
   candle.dataset.candleName = `candle ${index + 1}`;
@@ -215,6 +229,7 @@ document.getElementById("closeCandleBirthday").addEventListener("click", closeCa
 closeCandleBirthdayButton.addEventListener("click", () => {
   closeCandleBirthdayDialog();
   cakeCutUnlocked = true;
+  cakeScene.classList.add("cake-cut-ready");
   birthdayCake.classList.add("cake-cut-unlocked");
   birthdayCake.setAttribute("tabindex", "0");
   birthdayCake.setAttribute("aria-label", "Cut the birthday cake. Press Enter or Space, or click the cake.");
@@ -506,7 +521,6 @@ if ("IntersectionObserver" in window) {
   revealItems.forEach((item) => item.classList.add("is-visible"));
 }
 
-const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 startAnimatedBackdrop();
 launchBalloons(prefersReducedMotion ? 6 : 10);
 if (!prefersReducedMotion) {

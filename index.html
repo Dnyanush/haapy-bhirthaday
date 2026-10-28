@@ -52,7 +52,7 @@
   <main>
     <section class="hero">
       <div class="eyebrow"><span></span> A BIRTHDAY FOR MY BEST FRIEND <span></span></div>
-      <h1>Happy Birthday,<br><span class="gradient-text" id="friendName">Khushaboo ji</span><span class="pink-heart">♥</span></h1>
+      <h1><span class="birthday-greeting">Happy Birthday,</span><br><span class="gradient-text" id="friendName">Khushaboo ji</span><span class="pink-heart">♥</span></h1>
       <p class="intro">To my favourite human, my best friend,<br class="desktop-only"> and the best friend life picked just for me.</p>
       <div class="experience-tag"><span class="live-dot"></span> MADE WITH FRIENDSHIP · JUST FOR YOU</div>
 
@@ -67,13 +67,25 @@
           <div class="cake-bottom"><div class="sprinkles"></div></div>
           <div class="cake-plate"></div>
         </div>
+        <svg class="cake-knife" viewBox="0 0 92 28" aria-hidden="true">
+          <defs>
+            <linearGradient id="knife-metal" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0" stop-color="#fff" />
+              <stop offset=".48" stop-color="#d9e3ed" />
+              <stop offset="1" stop-color="#8493a3" />
+            </linearGradient>
+          </defs>
+          <path class="cake-knife-blade" d="M7 5h61L89 14 68 23H7z" />
+          <path class="cake-knife-handle" d="M3 4h12v20H3a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3z" />
+          <path class="cake-knife-rivet" d="M8 10h3v3H8zm0 6h3v3H8z" />
+        </svg>
         <div class="floating-heart heart-one">♥</div><div class="floating-heart heart-two">♡</div>
         <div class="floating-star star-one">✦</div><div class="floating-star star-two">✧</div>
       </div>
 
       <div class="hero-actions">
         <button class="wish-button" id="wishButton"><span>Make a birthday wish</span><b>✧</b></button>
-        <button class="blow-button" id="blowButton" aria-pressed="false">🕯️ <span>Blow out the candles</span></button>
+        <button class="blow-button" id="blowButton" aria-pressed="false"><span class="blow-icon" aria-hidden="true">🕯️</span><span>Blow out the candles</span></button>
       </div>
       <div class="wish-hint" id="wishHint">Close your eyes, make a wish, and let the magic begin ✨</div>
     </section>
@@ -128,7 +140,13 @@
           <span class="gift-box-lid"></span>
           <span class="gift-box-body"></span>
           <span class="gift-box-ribbon"></span>
-          <span class="gift-box-bow"></span>
+          <span class="gift-box-bow">
+            <span class="gift-bow-loop gift-bow-loop-left"></span>
+            <span class="gift-bow-loop gift-bow-loop-right"></span>
+            <span class="gift-bow-tail gift-bow-tail-left"></span>
+            <span class="gift-bow-tail gift-bow-tail-right"></span>
+            <span class="gift-bow-knot"></span>
+          </span>
         </span>
         <span class="gift-box-prompt">Tap to open your gift ✨</span>
       </button>
