@@ -1,15 +1,16 @@
+
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap');
 
 :root{--bg:#100b20;--pink:#ff75b7;--lilac:#bba0ff;--text:#fff8ff;--muted:#c8bbd9}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:clip}
 body{margin:0;background:radial-gradient(ellipse at 50% 0%,#35204d 0%,#170e2b 45%,#0c0918 100%);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;min-height:100vh}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:43px 43px;mask-image:linear-gradient(to bottom,black,transparent 80%);z-index:-1}
 .birthday-photo-background{position:fixed;inset:0;pointer-events:none;z-index:0;background:linear-gradient(180deg,rgba(13,8,24,.4),rgba(13,8,24,.72)),url("birthday-background.png") center 48%/cover no-repeat;opacity:.72}
 .birthday-backdrop{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
 .ambient,.sparkle-field{z-index:2}
 .topbar,main,footer{position:relative;z-index:3}
-.ambient{position:absolute;width:340px;height:340px;border-radius:50%;filter:blur(90px);opacity:.22;pointer-events:none}
+.ambient{position:fixed;width:340px;height:340px;border-radius:50%;filter:blur(90px);opacity:.22;pointer-events:none}
 .ambient-one{background:#f04dba;top:200px;left:-160px}.ambient-two{background:#7758ff;top:650px;right:-150px}
 .topbar{height:82px;display:flex;align-items:center;justify-content:space-between;max-width:1120px;margin:auto;padding:0 28px}
 .brand{font-size:11px;letter-spacing:2.3px;font-weight:700;color:#e8d8fa}.brand-star{color:var(--pink);font-size:18px;margin-right:8px;vertical-align:-2px}
@@ -137,9 +138,6 @@ footer{text-align:center;padding:28px 15px 35px;color:#8f809f;font-size:9px;lett
 .wish-button:hover:after{transform:translateX(130%)}
 .message-card,.friendship-timeline{transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease}
 .message-card:hover,.friendship-timeline:hover{transform:translateY(-4px);border-color:#f38fc54f;box-shadow:0 28px 75px #05020d46}
-.memory-card{animation:card-arrive .7s both}
-.memory-card:nth-child(2){animation-delay:.12s}
-.memory-card:nth-child(3){animation-delay:.24s}
 .birthday-balloon{filter:drop-shadow(0 8px 18px #f081c533)}
 @keyframes hero-arrive{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 @keyframes card-arrive{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
@@ -147,6 +145,40 @@ footer{text-align:center;padding:28px 15px 35px;color:#8f809f;font-size:9px;lett
 
 .cake-scene:before{content:"";position:absolute;left:50%;top:50%;width:310px;height:220px;transform:translate(-50%,-38%);border-radius:50%;background:radial-gradient(ellipse,#ff83c52b 0%,#bc8bff14 42%,transparent 72%);filter:blur(8px);pointer-events:none;animation:cake-aura 4s ease-in-out infinite}
 .cake{animation:cake-showcase 6s ease-in-out infinite;transform-origin:50% 78%;will-change:transform}
+.cake-cut-unlocked{cursor:pointer;transition:filter .25s ease}
+.cake-cut-unlocked:hover,.cake-cut-unlocked:focus-visible{filter:drop-shadow(0 0 18px #ff9dccaa) drop-shadow(0 28px 25px #03010a70)}
+.cake-cut-unlocked:focus-visible{outline:2px solid #ffd1e7;outline-offset:8px;border-radius:50%}
+.cake-top,.cake-middle,.cake-bottom{transition:transform .65s cubic-bezier(.2,.8,.2,1)}
+.cake:after{content:"";position:absolute;z-index:4;left:108px;top:31px;width:3px;height:145px;border-radius:50%;background:linear-gradient(180deg,transparent 0%,#fff5fb 12%,#ffb9dd 48%,#fff1c8 82%,transparent 100%);box-shadow:0 0 10px #ff9dcc,0 0 24px #ff9dcc88;opacity:0;transform:rotate(12deg) scaleY(0);transform-origin:top;pointer-events:none}
+.cake.is-cut{animation:none;transform:rotateX(7deg) rotateY(-8deg)}
+.cake.is-cut:after{animation:cake-slice-mark .7s ease-out forwards}
+.cake.is-cut .cake-top{transform:translate(13px,-3px) rotate(5deg)}
+.cake.is-cut .cake-middle{transform:translateX(-7px)}
+.cake.is-cut .cake-bottom{transform:translate(8px,2px)}
+@keyframes cake-slice-mark{0%{opacity:0;transform:rotate(12deg) scaleY(0)}55%{opacity:1;transform:rotate(12deg) scaleY(1)}100%{opacity:.82;transform:rotate(12deg) scaleY(1)}}
+.wish-hint{display:table;margin-left:auto;margin-right:auto;padding:8px 14px;border:1px solid transparent;border-radius:999px;transition:color .25s ease,background .25s ease,border-color .25s ease,box-shadow .25s ease}
+.wish-hint.wish-made{color:#fff3fc;background:linear-gradient(110deg,#f36eb533,#b58bff33);border-color:#ffd5ed75;box-shadow:0 0 24px #f27abd45,0 6px 24px #05020d35;animation:wish-hint-pop .65s cubic-bezier(.2,.8,.25,1.3) both}
+@keyframes wish-hint-pop{0%{opacity:.35;transform:translateY(12px) scale(.86)}65%{opacity:1;transform:translateY(-3px) scale(1.04)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.wish-hint.wish-made{animation:none}}
+.birthday-treat{position:fixed;z-index:90;pointer-events:none;user-select:none;font-size:clamp(20px,4vw,34px);line-height:1;filter:drop-shadow(0 4px 10px #ff8bc766);animation:treat-burst 2.35s cubic-bezier(.15,.65,.3,1) forwards}
+@keyframes treat-burst{0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(0)}12%{opacity:1;transform:translate(-50%,-50%) scale(1.2) rotate(12deg)}78%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--treat-x)),calc(-50% + var(--treat-y))) scale(.75) rotate(var(--treat-spin))}}
+@media(prefers-reduced-motion:reduce){.birthday-treat{animation:none;display:none}}
+
+.message-card .card-icon,.message-card .section-kicker,.message-card h2,.message-card .card-copy>p:not(.section-kicker),.memories>.section-kicker,.memories>h2,.memory-card,.timeline-heading>* ,.timeline-item,footer{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.2,1)}
+.message-card.is-visible .card-icon,.message-card.is-visible .section-kicker,.message-card.is-visible h2,.message-card.is-visible .card-copy>p:not(.section-kicker),.memories.is-visible>.section-kicker,.memories.is-visible>h2,.memories.is-visible .memory-card,.friendship-timeline.is-visible .timeline-heading>*,.friendship-timeline.is-visible .timeline-item,footer.is-visible{opacity:1;transform:translateY(0)}
+.message-card.is-visible .card-icon{transition-delay:.05s}
+.message-card.is-visible .section-kicker,.memories.is-visible>.section-kicker,.friendship-timeline.is-visible .timeline-heading>.section-kicker{transition-delay:.12s}
+.message-card.is-visible h2,.memories.is-visible>h2,.friendship-timeline.is-visible .timeline-heading h2{transition-delay:.2s}
+.message-card.is-visible .card-copy>p:not(.section-kicker):not(.signature){transition-delay:.3s}
+.message-card.is-visible .signature{transition-delay:.42s}
+.memories.is-visible .memory-card:nth-child(1){transition-delay:.16s}
+.memories.is-visible .memory-card:nth-child(2){transition-delay:.28s}
+.memories.is-visible .memory-card:nth-child(3){transition-delay:.4s}
+.friendship-timeline.is-visible .timeline-heading>p:last-child{transition-delay:.3s}
+.friendship-timeline.is-visible .timeline-item:nth-child(1){transition-delay:.22s}
+.friendship-timeline.is-visible .timeline-item:nth-child(2){transition-delay:.34s}
+.friendship-timeline.is-visible .timeline-item:nth-child(3){transition-delay:.46s}
+@media(prefers-reduced-motion:reduce){.message-card .card-icon,.message-card .section-kicker,.message-card h2,.message-card .card-copy>p:not(.section-kicker),.memories>.section-kicker,.memories>h2,.memory-card,.timeline-heading>*,.timeline-item,footer{opacity:1;transform:none;transition:none}}
 .cake-bottom,.cake-middle{overflow:hidden}
 .cake-bottom:after,.cake-middle:after{content:"";position:absolute;top:-35%;left:-70%;width:42%;height:180%;transform:rotate(24deg);background:linear-gradient(90deg,transparent,#ffffff42,transparent);pointer-events:none;animation:icing-shine 5.5s ease-in-out infinite}
 .cake-middle:after{animation-delay:1.6s}
@@ -165,5 +197,11 @@ footer{text-align:center;padding:28px 15px 35px;color:#8f809f;font-size:9px;lett
 @keyframes plate-glow{0%,100%{filter:drop-shadow(0 0 4px #dcaaff22)}50%{filter:drop-shadow(0 0 15px #f6a8ff75)}}
 @keyframes orbit-turn{from{rotate:0deg}to{rotate:360deg}}
 @keyframes candle-sway{0%,100%{translate:0 0}50%{translate:0 -2px}}
-@media(prefers-reduced-motion:reduce){.cake,.cake-scene:before,.cake-bottom:after,.cake-middle:after,.cake-top span,.cake-plate,.orbit,.candle-one,.candle-two,.candle-three{animation:none;will-change:auto}.cake{transform:rotateX(7deg) rotateY(-8deg)}}
+@media(prefers-reduced-motion:reduce){.cake,.cake-scene:before,.cake-bottom:after,.cake-middle:after,.cake-top span,.cake-plate,.orbit,.candle-one,.candle-two,.candle-three{animation:none;will-change:auto}.cake{transform:rotateX(7deg) rotateY(-8deg)}.cake-top,.cake-middle,.cake-bottom{transition:none}.cake.is-cut:after{animation:none;opacity:.82;transform:rotate(12deg) scaleY(1)}}
 @media(prefers-reduced-motion:reduce){.birthday-backdrop{display:none}.hero .eyebrow,.hero h1,.hero .intro,.hero .experience-tag,.hero .cake-scene,.hero .hero-actions,.hero .wish-hint,.memory-card,.music-button.is-playing{animation:none;opacity:1}.wish-button:after{display:none}.message-card,.friendship-timeline{transition:none}}
+
+.hero h1{animation-name:hero-arrive,birthday-heading-glow;animation-duration:.75s,4s;animation-delay:.18s,1s;animation-timing-function:ease,ease-in-out;animation-fill-mode:both,none;animation-iteration-count:1,infinite}
+.hero h1 #friendName{display:inline-block;background-image:linear-gradient(105deg,#ffb7d9 0%,#ff70b8 24%,#fff5fb 48%,#c7a6ff 68%,#ffb7d9 100%);background-size:230% auto;background-position:0% center;filter:drop-shadow(0 0 16px #f27abd55);animation:name-shimmer 4s ease-in-out infinite}
+@keyframes birthday-heading-glow{0%,100%{text-shadow:0 8px 35px #e957a51c}50%{text-shadow:0 8px 45px #f26cb766,0 0 24px #b58bff3d}}
+@keyframes name-shimmer{0%,100%{background-position:0% center;filter:drop-shadow(0 0 12px #f27abd44)}50%{background-position:100% center;filter:drop-shadow(0 0 24px #f27abd99)}}
+@media(prefers-reduced-motion:reduce){.hero h1{animation:none}.hero h1 #friendName{animation:none;background-position:center;filter:none}}

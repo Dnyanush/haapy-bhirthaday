@@ -1,5 +1,5 @@
 const DEFAULT_CONFIG = {
-  friendName: "Bestie",
+  friendName: "Khushaboo ji",
   message: "You are loved more than words can say. May this year bring you endless joy, peace, and beautiful surprises."
 };
 
@@ -18,14 +18,18 @@ const musicButton = document.getElementById("musicButton");
 const birthdayMusic = document.getElementById("birthdayMusic");
 const blowButton = document.getElementById("blowButton");
 const cakeScene = document.querySelector(".cake-scene");
+const birthdayCake = document.getElementById("birthdayCake");
+const wishHint = document.getElementById("wishHint");
 const candles = Array.from(cakeScene.querySelectorAll(".candle"));
 const candleBirthdayDialog = document.getElementById("candleBirthdayDialog");
+const closeCandleBirthdayButton = document.getElementById("closeCandleBirthdayButton");
 const surpriseDialog = document.getElementById("surpriseDialog");
 const surpriseMessage = document.getElementById("surpriseMessage");
 let toastTimer;
 let isMusicOn = false;
 let surpriseIndex = -1;
 let autoplayFallbackRegistered = false;
+let cakeCutUnlocked = false;
 
 function showToast(message) {
   toast.textContent = message;
@@ -92,6 +96,30 @@ function burstConfetti(count = 65) {
   }
 }
 
+function showerBirthdayTreats(origin) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const treats = ["🍬", "🍫", "🍭", "⭐", "✨", "💖", "🎉"];
+  const bounds = origin.getBoundingClientRect();
+  const originX = bounds.left + bounds.width / 2;
+  const originY = bounds.top + bounds.height / 2;
+
+  for (let index = 0; index < 28; index++) {
+    const treat = document.createElement("span");
+    treat.className = "birthday-treat";
+    treat.setAttribute("aria-hidden", "true");
+    treat.textContent = treats[Math.floor(Math.random() * treats.length)];
+    treat.style.left = `${originX}px`;
+    treat.style.top = `${originY}px`;
+    treat.style.setProperty("--treat-x", `${(Math.random() - 0.5) * Math.min(window.innerWidth * 0.9, 620)}px`);
+    treat.style.setProperty("--treat-y", `${(Math.random() - 0.58) * 440}px`);
+    treat.style.setProperty("--treat-spin", `${(Math.random() - 0.5) * 540}deg`);
+    treat.style.animationDelay = `${Math.random() * 180}ms`;
+    document.body.appendChild(treat);
+    setTimeout(() => treat.remove(), 2700);
+  }
+}
+
 function updateCandleControls() {
   const extinguishedCount = candles.filter((candle) => candle.classList.contains("is-out")).length;
   const allCandlesAreOut = extinguishedCount === candles.length;
@@ -117,6 +145,30 @@ function celebrateAllCandlesOut() {
   candleBirthdayDialog.showModal();
 }
 
+function cutBirthdayCake() {
+  if (!cakeCutUnlocked) {
+    showToast("First put out the candles and press Thank you!");
+    return;
+  }
+  if (birthdayCake.classList.contains("is-cut")) return;
+
+  birthdayCake.classList.add("is-cut");
+  birthdayCake.setAttribute("aria-label", "Birthday cake has been cut.");
+  birthdayCake.setAttribute("aria-pressed", "true");
+  burstConfetti(65);
+  showToast(`🎂 The cake is cut! Happy Birthday, ${config.friendName}!`);
+}
+
+birthdayCake.addEventListener("click", (event) => {
+  if (event.target instanceof Element && event.target.closest(".candle")) return;
+  cutBirthdayCake();
+});
+birthdayCake.addEventListener("keydown", (event) => {
+  if (event.target !== birthdayCake || (event.key !== "Enter" && event.key !== " ")) return;
+  event.preventDefault();
+  cutBirthdayCake();
+});
+
 candles.forEach((candle, index) => {
   candle.dataset.candleName = `candle ${index + 1}`;
   candle.addEventListener("click", () => {
@@ -130,8 +182,13 @@ candles.forEach((candle, index) => {
   });
 });
 
-document.getElementById("wishButton").addEventListener("click", () => {
+document.getElementById("wishButton").addEventListener("click", (event) => {
   burstConfetti(90);
+  showerBirthdayTreats(event.currentTarget);
+  wishHint.textContent = `Your wish is on its way, ${config.friendName}! ✨`;
+  wishHint.classList.remove("wish-made");
+  void wishHint.offsetWidth;
+  wishHint.classList.add("wish-made");
   startBirthdayMusic().catch(() => {
     showToast(birthdayMusic.error ? "Birthday music couldn't load. Check your internet connection." : "Tap Birthday vibes to start the song.");
   });
@@ -151,7 +208,15 @@ function closeCandleBirthdayDialog() {
 }
 
 document.getElementById("closeCandleBirthday").addEventListener("click", closeCandleBirthdayDialog);
-document.getElementById("closeCandleBirthdayButton").addEventListener("click", closeCandleBirthdayDialog);
+closeCandleBirthdayButton.addEventListener("click", () => {
+  closeCandleBirthdayDialog();
+  cakeCutUnlocked = true;
+  birthdayCake.classList.add("cake-cut-unlocked");
+  birthdayCake.setAttribute("tabindex", "0");
+  birthdayCake.setAttribute("aria-label", "Cut the birthday cake. Press Enter or Space, or click the cake.");
+  wishHint.textContent = "Now click the cake to cut it! 🎂";
+  showToast("The cake is ready! Click it to cut the first slice.");
+});
 candleBirthdayDialog.addEventListener("click", (event) => {
   if (event.target === candleBirthdayDialog) closeCandleBirthdayDialog();
 });

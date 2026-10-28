@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Happy Birthday, Bestie! ✨</title>
+  <title>Happy Birthday, Khushaboo ji! ✨</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -20,14 +20,14 @@
 
   <main>
     <section class="hero">
-      <div class="eyebrow"><span></span> AN INTERACTIVE BIRTHDAY EXPERIENCE <span></span></div>
-      <h1>Happy Birthday,<br><span class="gradient-text" id="friendName">Bestie</span><span class="pink-heart">♥</span></h1>
-      <p class="intro">To my favourite human, my best friend,<br class="desktop-only"> and the sister life picked just for me.</p>
-      <div class="experience-tag"><span class="live-dot"></span> MADE WITH LOVE · JUST FOR YOU</div>
+      <div class="eyebrow"><span></span> A BIRTHDAY FOR MY BEST FRIEND <span></span></div>
+      <h1>Happy Birthday,<br><span class="gradient-text" id="friendName">Khushaboo ji</span><span class="pink-heart">♥</span></h1>
+      <p class="intro">To my favourite human, my best friend,<br class="desktop-only"> and the best friend life picked just for me.</p>
+      <div class="experience-tag"><span class="live-dot"></span> MADE WITH FRIENDSHIP · JUST FOR YOU</div>
 
       <div class="cake-scene" aria-label="A 3D-style birthday cake with candles">
         <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
-        <div class="cake">
+        <div class="cake" id="birthdayCake" tabindex="-1" aria-label="Birthday cake. First press Thank you in the birthday popup, then click here to cut the cake.">
           <button class="candle candle-one" type="button" aria-label="Blow out candle 1" aria-pressed="false"><i aria-hidden="true"></i></button>
           <button class="candle candle-two" type="button" aria-label="Blow out candle 2" aria-pressed="false"><i aria-hidden="true"></i></button>
           <button class="candle candle-three" type="button" aria-label="Blow out candle 3" aria-pressed="false"><i aria-hidden="true"></i></button>
@@ -44,7 +44,7 @@
         <button class="wish-button" id="wishButton"><span>Make a birthday wish</span><b>✧</b></button>
         <button class="blow-button" id="blowButton" aria-pressed="false">🕯️ <span>Blow out the candles</span></button>
       </div>
-      <div class="wish-hint">Close your eyes, make a wish, and let the magic begin ✨</div>
+      <div class="wish-hint" id="wishHint">Close your eyes, make a wish, and let the magic begin ✨</div>
     </section>
 
     <section class="message-card glass reveal-on-scroll">
@@ -53,7 +53,7 @@
         <p class="section-kicker">A NOTE FROM YOUR BEST FRIEND</p>
         <h2>You're one of my <span class="gradient-text">greatest gifts.</span></h2>
         <p>Thank you for every laugh, every secret, every silly memory, and every moment you made brighter just by being there. I hope this new year brings you soft days, big dreams, endless love, and all the happiness your heart can hold.</p>
-        <p class="signature">Always in your corner, <span>your bestie ♡</span></p>
+        <p class="signature">Always in your corner, <span>my bestuu ♡</span></p>
       </div>
     </section>
 
@@ -91,14 +91,14 @@
 
   </main>
 
-  <footer>MADE WITH <span>♥</span> FOR MY FAVOURITE GIRL · HAPPY BIRTHDAY</footer>
+  <footer class="reveal-on-scroll">MADE WITH <span>♥</span> FOR MY FAVOURITE PERSON · HAPPY BIRTHDAY</footer>
   <div class="toast" id="toast" role="status"></div>
   <audio id="birthdayMusic" src="https://raw.githubusercontent.com/gorairaju699-coder/Premium-Birthday-Website/main/music/birthday.mp3" autoplay loop preload="auto" aria-hidden="true"></audio>
   <dialog class="surprise-dialog candle-birthday-dialog" id="candleBirthdayDialog" aria-labelledby="candleBirthdayTitle">
     <button class="dialog-close" id="closeCandleBirthday" aria-label="Close birthday message">×</button>
     <div class="surprise-gift" aria-hidden="true">🎂</div>
     <p class="section-kicker">A WISH JUST CAME TRUE</p>
-    <h2 id="candleBirthdayTitle"><span class="gradient-text">Happy Birthday, dear Khooshaboo ji!</span></h2>
+    <h2 id="candleBirthdayTitle"><span class="gradient-text">Happy Birthday, dear Khushaboo ji!</span></h2>
     <p class="surprise-message">May your special day be filled with love, laughter, and all the happiness you deserve. 💖</p>
     <button class="wish-button" id="closeCandleBirthdayButton"><span>Thank you!</span><b>♥</b></button>
   </dialog>
