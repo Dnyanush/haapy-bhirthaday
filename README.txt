@@ -16,8 +16,9 @@ Use %20 for spaces in the message.
 
 NOTES
 - The cake and visual effects are made with CSS, so no installation or build tools are needed.
+- The birthday balloon background image is stored locally as birthday-background.png.
 - The layout works on mobile and desktop.
 - Google Fonts need an internet connection; the site still works without them using fallback fonts.
-- The page attempts to autoplay a synthesized version of the traditional "Happy Birthday" tune. If the browser blocks autoplay, tap the music button to start it.
-- The page launches decorative balloons on open. Visitors can disable animation using their device's reduced-motion accessibility setting.
+- The page attempts to autoplay the Happy Birthday MP3 hosted in the Premium Birthday Website repository. An internet connection is required; if the browser blocks autoplay, tap the music button to start it.
+- The page launches a balloon and confetti celebration on open, with occasional balloon releases while the page is open. Visitors can disable animation using their device's reduced-motion accessibility setting.
 - Browsers and mobile devices control autoplay permissions; a website cannot override those settings.

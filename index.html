@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="birthday-photo-background" aria-hidden="true"></div>
+  <canvas class="birthday-backdrop" id="birthdayBackdrop" aria-hidden="true"></canvas>
   <div class="ambient ambient-one"></div>
   <div class="ambient ambient-two"></div>
   <div class="sparkle-field" id="sparkleField" aria-hidden="true"></div>
@@ -18,16 +20,17 @@
 
   <main>
     <section class="hero">
-      <div class="eyebrow"><span></span> TODAY IS ALL ABOUT YOU <span></span></div>
+      <div class="eyebrow"><span></span> AN INTERACTIVE BIRTHDAY EXPERIENCE <span></span></div>
       <h1>Happy Birthday,<br><span class="gradient-text" id="friendName">Bestie</span><span class="pink-heart">♥</span></h1>
-      <p class="intro">To my favourite human, my partner in chaos,<br class="desktop-only"> and the sister life picked just for me.</p>
+      <p class="intro">To my favourite human, my best friend,<br class="desktop-only"> and the sister life picked just for me.</p>
+      <div class="experience-tag"><span class="live-dot"></span> MADE WITH LOVE · JUST FOR YOU</div>
 
       <div class="cake-scene" aria-label="A 3D-style birthday cake with candles">
         <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
         <div class="cake">
-          <div class="candle candle-one"><i></i></div>
-          <div class="candle candle-two"><i></i></div>
-          <div class="candle candle-three"><i></i></div>
+          <button class="candle candle-one" type="button" aria-label="Blow out candle 1" aria-pressed="false"><i aria-hidden="true"></i></button>
+          <button class="candle candle-two" type="button" aria-label="Blow out candle 2" aria-pressed="false"><i aria-hidden="true"></i></button>
+          <button class="candle candle-three" type="button" aria-label="Blow out candle 3" aria-pressed="false"><i aria-hidden="true"></i></button>
           <div class="cake-top"><span>♥</span></div>
           <div class="cake-middle"><div class="icing-drip"></div></div>
           <div class="cake-bottom"><div class="sprinkles"></div></div>
@@ -37,11 +40,14 @@
         <div class="floating-star star-one">✦</div><div class="floating-star star-two">✧</div>
       </div>
 
-      <button class="wish-button" id="wishButton"><span>Make a birthday wish</span><b>✧</b></button>
-      <div class="wish-hint">Close your eyes, make a wish, and tap ✨</div>
+      <div class="hero-actions">
+        <button class="wish-button" id="wishButton"><span>Make a birthday wish</span><b>✧</b></button>
+        <button class="blow-button" id="blowButton" aria-pressed="false">🕯️ <span>Blow out the candles</span></button>
+      </div>
+      <div class="wish-hint">Close your eyes, make a wish, and let the magic begin ✨</div>
     </section>
 
-    <section class="message-card glass">
+    <section class="message-card glass reveal-on-scroll">
       <div class="card-icon">💌</div>
       <div class="card-copy">
         <p class="section-kicker">A NOTE FROM YOUR BEST FRIEND</p>
@@ -51,7 +57,7 @@
       </div>
     </section>
 
-    <section class="memories">
+    <section class="memories reveal-on-scroll">
       <p class="section-kicker">LITTLE REMINDERS</p>
       <h2>Reasons you're <span class="gradient-text">so special</span></h2>
       <div class="memory-grid">
@@ -61,19 +67,49 @@
       </div>
     </section>
 
-    <section class="finale">
-      <div class="finale-glow"></div>
-      <div class="finale-content">
-        <div class="big-heart">♡</div>
-        <h2>Keep shining, birthday girl.</h2>
-        <p>May your year be as beautiful, rare, and wonderful as you are.</p>
-        <button class="wish-button secondary" id="surpriseButton">One more surprise <b>✦</b></button>
+    <section class="friendship-timeline reveal-on-scroll" aria-labelledby="timelineTitle">
+      <div class="timeline-heading">
+        <p class="section-kicker">OUR LITTLE STORY</p>
+        <h2 id="timelineTitle">The best moments are <span class="gradient-text">still ahead.</span></h2>
+        <p class="timeline-intro">A tiny celebration of all the joy you bring into my life.</p>
+      </div>
+      <div class="timeline">
+        <article class="timeline-item">
+          <span class="timeline-marker">01</span>
+          <div><p class="timeline-label">THE BEGINNING</p><h3>One hello, a million laughs</h3><p>Somehow, the simplest moments with you always become my favourites.</p></div>
+        </article>
+        <article class="timeline-item">
+          <span class="timeline-marker">02</span>
+          <div><p class="timeline-label">ALL THE LITTLE THINGS</p><h3>Our own kind of magic</h3><p>Inside jokes, long talks, and being there for each other—every bit matters.</p></div>
+        </article>
+        <article class="timeline-item">
+          <span class="timeline-marker">03</span>
+          <div><p class="timeline-label">WHAT COMES NEXT</p><h3>More memories to make</h3><p>Here’s to a new year of adventures, happy surprises, and us being us.</p></div>
+        </article>
       </div>
     </section>
+
   </main>
 
   <footer>MADE WITH <span>♥</span> FOR MY FAVOURITE GIRL · HAPPY BIRTHDAY</footer>
   <div class="toast" id="toast" role="status"></div>
+  <audio id="birthdayMusic" src="https://raw.githubusercontent.com/gorairaju699-coder/Premium-Birthday-Website/main/music/birthday.mp3" autoplay loop preload="auto" aria-hidden="true"></audio>
+  <dialog class="surprise-dialog candle-birthday-dialog" id="candleBirthdayDialog" aria-labelledby="candleBirthdayTitle">
+    <button class="dialog-close" id="closeCandleBirthday" aria-label="Close birthday message">×</button>
+    <div class="surprise-gift" aria-hidden="true">🎂</div>
+    <p class="section-kicker">A WISH JUST CAME TRUE</p>
+    <h2 id="candleBirthdayTitle"><span class="gradient-text">Happy Birthday, dear Khooshaboo ji!</span></h2>
+    <p class="surprise-message">May your special day be filled with love, laughter, and all the happiness you deserve. 💖</p>
+    <button class="wish-button" id="closeCandleBirthdayButton"><span>Thank you!</span><b>♥</b></button>
+  </dialog>
+  <dialog class="surprise-dialog" id="surpriseDialog" aria-labelledby="surpriseTitle">
+    <button class="dialog-close" id="closeSurprise" aria-label="Close surprise">×</button>
+    <div class="surprise-gift" aria-hidden="true">🎁</div>
+    <p class="section-kicker">A LITTLE BIRTHDAY SECRET</p>
+    <h2 id="surpriseTitle">For someone <span class="gradient-text">one of a kind.</span></h2>
+    <p class="surprise-message" id="surpriseMessage" aria-live="polite"></p>
+    <button class="wish-button" id="anotherSurprise"><span>Another little surprise</span><b>✦</b></button>
+  </dialog>
   <script src="script.js"></script>
 </body>
 </html>

@@ -15,19 +15,17 @@ friendName.textContent = config.friendName;
 
 const toast = document.getElementById("toast");
 const musicButton = document.getElementById("musicButton");
+const birthdayMusic = document.getElementById("birthdayMusic");
+const blowButton = document.getElementById("blowButton");
+const cakeScene = document.querySelector(".cake-scene");
+const candles = Array.from(cakeScene.querySelectorAll(".candle"));
+const candleBirthdayDialog = document.getElementById("candleBirthdayDialog");
+const surpriseDialog = document.getElementById("surpriseDialog");
+const surpriseMessage = document.getElementById("surpriseMessage");
 let toastTimer;
-let audioCtx;
 let isMusicOn = false;
-let melodyTimer = null;
-const activeNotes = new Set();
-const beatDuration = 0.32;
-const birthdayNotes = [
-  [392.00, 1], [392.00, 1], [440.00, 2], [392.00, 2], [523.25, 2], [493.88, 4],
-  [392.00, 1], [392.00, 1], [440.00, 2], [392.00, 2], [587.33, 2], [523.25, 4],
-  [392.00, 1], [392.00, 1], [783.99, 2], [659.25, 2], [523.25, 2], [493.88, 2], [440.00, 4],
-  [698.46, 1], [698.46, 1], [659.25, 2], [523.25, 2], [587.33, 2], [523.25, 4]
-];
-const songDuration = birthdayNotes.reduce((total, [, beats]) => total + beats, 0) * beatDuration;
+let surpriseIndex = -1;
+let autoplayFallbackRegistered = false;
 
 function showToast(message) {
   toast.textContent = message;
@@ -36,55 +34,9 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.remove("show"), 3200);
 }
 
-function ensureAudioContext() {
-  const AudioCtor = window.AudioContext || window.webkitAudioContext;
-  if (!AudioCtor) return null;
-  if (!audioCtx) audioCtx = new AudioCtor();
-  return audioCtx;
-}
-
-async function playBirthdaySong() {
-  const ctx = ensureAudioContext();
-  if (!ctx) {
-    return false;
-  }
-  if (ctx.state === "suspended") await ctx.resume();
-
-  let elapsedBeats = 0;
-  birthdayNotes.forEach(([frequency, beats]) => {
-    const oscillator = ctx.createOscillator();
-    const gainNode = ctx.createGain();
-    const startTime = ctx.currentTime + elapsedBeats * beatDuration;
-    const duration = beats * beatDuration;
-    const noteEnd = startTime + duration * 0.9;
-
-    oscillator.type = "triangle";
-    oscillator.frequency.value = frequency;
-    gainNode.gain.setValueAtTime(0.0001, startTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.045, startTime + 0.035);
-    gainNode.gain.setValueAtTime(0.045, noteEnd - 0.04);
-    gainNode.gain.exponentialRampToValueAtTime(0.0001, noteEnd);
-
-    oscillator.connect(gainNode);
-    gainNode.connect(ctx.destination);
-    oscillator.start(startTime);
-    oscillator.stop(noteEnd);
-    activeNotes.add(oscillator);
-    oscillator.addEventListener("ended", () => activeNotes.delete(oscillator), { once: true });
-    elapsedBeats += beats;
-  });
-  return true;
-}
-
 function stopBirthdaySong() {
-  activeNotes.forEach((note) => {
-    try {
-      note.stop();
-    } catch (error) {
-      if (error.name !== "InvalidStateError") throw error;
-    }
-  });
-  activeNotes.clear();
+  birthdayMusic.pause();
+  birthdayMusic.currentTime = 0;
 }
 
 async function toggleMusic() {
@@ -92,48 +44,35 @@ async function toggleMusic() {
 
   if (isMusicOn) {
     isMusicOn = false;
-    musicButton.classList.remove("is-playing");
-    musicButton.innerHTML = "♫ <span>Birthday vibes</span>";
-    musicButton.setAttribute("aria-pressed", "false");
-    clearInterval(melodyTimer);
+    updateMusicButtonForPausedState();
     stopBirthdaySong();
     showToast("🎵 Happy Birthday song paused.");
     return;
   }
 
-  const ctx = ensureAudioContext();
-  if (!ctx) {
-    showToast("Your browser does not support audio playback.");
-    return;
-  }
   try {
-    if (ctx.state === "suspended") await ctx.resume();
     await startBirthdayMusic();
     showToast("🎵 Happy Birthday is playing just for you!");
-  } catch (error) {
-    showToast("Tap Birthday vibes to start the song.");
+  } catch {
+    showToast(birthdayMusic.error ? "Birthday music couldn't load. Check your internet connection." : "Tap Birthday vibes to start the song.");
   }
 }
 
 async function startBirthdayMusic() {
-  const started = await playBirthdaySong();
-  if (!started) return false;
+  await birthdayMusic.play();
   isMusicOn = true;
   musicButton.classList.add("is-playing");
   musicButton.innerHTML = "❙❙ <span>Birthday vibes</span>";
   musicButton.setAttribute("aria-pressed", "true");
-  clearInterval(melodyTimer);
-  melodyTimer = setInterval(() => {
-    playBirthdaySong().catch(() => {
-      clearInterval(melodyTimer);
-      isMusicOn = false;
-      musicButton.classList.remove("is-playing");
-      musicButton.innerHTML = "♫ <span>Birthday vibes</span>";
-      musicButton.setAttribute("aria-pressed", "false");
-      showToast("Tap Birthday vibes to resume the song.");
-    });
-  }, songDuration * 1000 + 300);
+  musicButton.setAttribute("aria-label", "Pause birthday music");
   return true;
+}
+
+function updateMusicButtonForPausedState() {
+  musicButton.classList.remove("is-playing");
+  musicButton.innerHTML = "♫ <span>Birthday vibes</span>";
+  musicButton.setAttribute("aria-pressed", "false");
+  musicButton.setAttribute("aria-label", "Play birthday music");
 }
 
 function burstConfetti(count = 65) {
@@ -153,16 +92,93 @@ function burstConfetti(count = 65) {
   }
 }
 
+function updateCandleControls() {
+  const extinguishedCount = candles.filter((candle) => candle.classList.contains("is-out")).length;
+  const allCandlesAreOut = extinguishedCount === candles.length;
+
+  cakeScene.classList.toggle("candles-out", allCandlesAreOut);
+  blowButton.setAttribute("aria-pressed", String(allCandlesAreOut));
+  blowButton.querySelector("span").textContent = allCandlesAreOut
+    ? "Relight the candles"
+    : extinguishedCount > 0
+      ? "Blow out remaining candles"
+      : "Blow out the candles";
+}
+
+function setCandleExtinguished(candle, extinguished) {
+  candle.classList.toggle("is-out", extinguished);
+  candle.setAttribute("aria-pressed", String(extinguished));
+  candle.setAttribute("aria-label", `${extinguished ? "Relight" : "Blow out"} ${candle.dataset.candleName}`);
+  updateCandleControls();
+}
+
+function celebrateAllCandlesOut() {
+  burstConfetti(75);
+  candleBirthdayDialog.showModal();
+}
+
+candles.forEach((candle, index) => {
+  candle.dataset.candleName = `candle ${index + 1}`;
+  candle.addEventListener("click", () => {
+    const extinguished = !candle.classList.contains("is-out");
+    setCandleExtinguished(candle, extinguished);
+    if (extinguished && candles.every((item) => item.classList.contains("is-out"))) {
+      celebrateAllCandlesOut();
+    } else {
+      showToast(extinguished ? "One candle out! Tap the others to make your wish." : "Your candle is glowing again!");
+    }
+  });
+});
+
 document.getElementById("wishButton").addEventListener("click", () => {
   burstConfetti(90);
-  playBirthdaySong();
+  startBirthdayMusic().catch(() => {
+    showToast(birthdayMusic.error ? "Birthday music couldn't load. Check your internet connection." : "Tap Birthday vibes to start the song.");
+  });
   showToast(`✨ Wish made for ${config.friendName}! May all your dreams bloom beautifully. 💖`);
 });
 
-document.getElementById("surpriseButton").addEventListener("click", () => {
-  burstConfetti(120);
-  playBirthdaySong();
-  showToast(`💗 Reminder, ${config.friendName}: ${config.message}`);
+blowButton.addEventListener("click", () => {
+  const allCandlesAreOut = candles.every((candle) => candle.classList.contains("is-out"));
+  candles.forEach((candle) => setCandleExtinguished(candle, !allCandlesAreOut));
+  if (!allCandlesAreOut) {
+    celebrateAllCandlesOut();
+  }
+});
+
+function closeCandleBirthdayDialog() {
+  candleBirthdayDialog.close();
+}
+
+document.getElementById("closeCandleBirthday").addEventListener("click", closeCandleBirthdayDialog);
+document.getElementById("closeCandleBirthdayButton").addEventListener("click", closeCandleBirthdayDialog);
+candleBirthdayDialog.addEventListener("click", (event) => {
+  if (event.target === candleBirthdayDialog) closeCandleBirthdayDialog();
+});
+
+const surprises = [
+  `💗 ${config.message}`,
+  `🌷 ${config.friendName}, you make ordinary days feel like something worth celebrating.`,
+  `✨ A little reminder: you deserve every kind thing you give to everyone else.`,
+  `🎂 New year, new adventures—and your best moments are still ahead.`,
+  `🫶 No matter how far life takes us, you’ll always have your best friend in your corner.`
+];
+
+function revealSurprise() {
+  let nextIndex = Math.floor(Math.random() * surprises.length);
+  if (surprises.length > 1 && nextIndex === surpriseIndex) {
+    nextIndex = (nextIndex + 1) % surprises.length;
+  }
+  surpriseIndex = nextIndex;
+  surpriseMessage.textContent = surprises[surpriseIndex];
+  burstConfetti(85);
+  launchBalloons(8);
+}
+
+document.getElementById("anotherSurprise").addEventListener("click", revealSurprise);
+document.getElementById("closeSurprise").addEventListener("click", () => surpriseDialog.close());
+surpriseDialog.addEventListener("click", (event) => {
+  if (event.target === surpriseDialog) surpriseDialog.close();
 });
 
 musicButton.addEventListener("click", toggleMusic);
@@ -175,6 +191,8 @@ function launchBalloons(count = 18) {
     const duration = 5 + Math.random() * 4;
     balloon.className = `birthday-balloon balloon-${colors[index % colors.length]}`;
     balloon.setAttribute("aria-hidden", "true");
+    balloon.style.width = `${34 + Math.random() * 20}px`;
+    balloon.style.height = `${46 + Math.random() * 24}px`;
     balloon.style.left = `${4 + Math.random() * 92}%`;
     if (reducedMotion) {
       balloon.classList.add("balloon-still");
@@ -191,15 +209,163 @@ function launchBalloons(count = 18) {
 }
 
 function tryAutoplayBirthdaySong() {
-  startBirthdayMusic()
-    .then((started) => {
-      if (!started) {
-        showToast("Tap Birthday vibes to hear the song.");
-      }
-    })
-    .catch(() => {
-      showToast("Tap Birthday vibes to hear the song.");
+  startBirthdayMusic().catch(() => {
+    if (birthdayMusic.error) {
+      showToast("Birthday music couldn't load. Check your internet connection.");
+      return;
+    }
+
+    showToast("Tap or press any key to start the birthday music.");
+    registerAutoplayFallback();
+  });
+}
+
+function registerAutoplayFallback() {
+  if (autoplayFallbackRegistered) return;
+  autoplayFallbackRegistered = true;
+
+  const startAfterGesture = (event) => {
+    if (event.target instanceof Element && event.target.closest("#musicButton")) return;
+    window.removeEventListener("pointerdown", startAfterGesture);
+    window.removeEventListener("keydown", startAfterGesture);
+    startBirthdayMusic().catch(() => {
+      showToast(birthdayMusic.error ? "Birthday music couldn't load. Check your internet connection." : "Tap Birthday vibes to hear the song.");
     });
+  };
+
+  window.addEventListener("pointerdown", startAfterGesture);
+  window.addEventListener("keydown", startAfterGesture);
+}
+
+function startAnimatedBackdrop() {
+  const canvas = document.getElementById("birthdayBackdrop");
+  const context = canvas.getContext("2d");
+  if (!context) return;
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const stars = Array.from({ length: 95 }, () => ({
+    x: Math.random(),
+    y: Math.random(),
+    radius: 0.4 + Math.random() * 1.4,
+    phase: Math.random() * Math.PI * 2,
+    speed: 0.4 + Math.random() * 1.2,
+    drift: (Math.random() - 0.5) * 0.000035,
+    hue: Math.random() > 0.55 ? 325 : 265
+  }));
+  const shootingStars = [];
+  let animationFrame;
+  let lastShootingStar = 0;
+  let width = 0;
+  let height = 0;
+
+  function resize() {
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = Math.round(width * pixelRatio);
+    canvas.height = Math.round(height * pixelRatio);
+    context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    draw(0, false);
+  }
+
+  function draw(time, animate = true) {
+    context.clearRect(0, 0, width, height);
+
+    const glowX = width * (0.25 + Math.sin(time * 0.00018) * 0.12);
+    const glowY = height * (0.24 + Math.cos(time * 0.00015) * 0.08);
+    const glow = context.createRadialGradient(glowX, glowY, 0, glowX, glowY, Math.max(width, height) * 0.78);
+    glow.addColorStop(0, "rgba(155, 74, 190, 0.13)");
+    glow.addColorStop(0.52, "rgba(91, 56, 151, 0.06)");
+    glow.addColorStop(1, "rgba(25, 16, 48, 0)");
+    context.fillStyle = glow;
+    context.fillRect(0, 0, width, height);
+
+    const auroraShift = Math.sin(time * 0.00022) * width * 0.08;
+    const aurora = context.createLinearGradient(0, height * 0.12, width, height * 0.62);
+    aurora.addColorStop(0, "rgba(80, 198, 208, 0)");
+    aurora.addColorStop(0.35, "rgba(157, 105, 226, 0.035)");
+    aurora.addColorStop(0.58, "rgba(255, 116, 188, 0.045)");
+    aurora.addColorStop(1, "rgba(80, 198, 208, 0)");
+    context.beginPath();
+    context.moveTo(-width * 0.1, height * 0.37);
+    context.bezierCurveTo(width * 0.25 + auroraShift, height * 0.14, width * 0.53 - auroraShift, height * 0.58, width * 1.1, height * 0.25);
+    context.lineTo(width * 1.1, height * 0.57);
+    context.bezierCurveTo(width * 0.53 - auroraShift, height * 0.86, width * 0.25 + auroraShift, height * 0.42, -width * 0.1, height * 0.68);
+    context.closePath();
+    context.fillStyle = aurora;
+    context.fill();
+
+    for (const star of stars) {
+      if (animate) {
+        star.x += star.drift;
+        if (star.x < -0.02) star.x = 1.02;
+        if (star.x > 1.02) star.x = -0.02;
+      }
+      const twinkle = animate ? 0.48 + Math.sin(time * 0.001 * star.speed + star.phase) * 0.34 : 0.72;
+      const x = star.x * width;
+      const y = star.y * height;
+      context.beginPath();
+      context.arc(x, y, star.radius * (0.8 + twinkle * 0.45), 0, Math.PI * 2);
+      context.fillStyle = `hsla(${star.hue}, 95%, 88%, ${twinkle})`;
+      context.fill();
+      if (star.radius > 1.45) {
+        context.beginPath();
+        context.arc(x, y, star.radius * 4.5, 0, Math.PI * 2);
+        context.fillStyle = `hsla(${star.hue}, 100%, 78%, ${twinkle * 0.075})`;
+        context.fill();
+      }
+    }
+
+    if (animate && time - lastShootingStar > 2200 + Math.random() * 2800 && shootingStars.length < 2) {
+      shootingStars.push({
+        x: Math.random() * width * 0.8 + width * 0.1,
+        y: Math.random() * height * 0.35,
+        vx: 5 + Math.random() * 5,
+        vy: 2 + Math.random() * 3,
+        life: 0,
+        duration: 38 + Math.random() * 24
+      });
+      lastShootingStar = time;
+    }
+
+    for (let index = shootingStars.length - 1; index >= 0; index--) {
+      const shootingStar = shootingStars[index];
+      shootingStar.x += shootingStar.vx;
+      shootingStar.y += shootingStar.vy;
+      shootingStar.life += 1;
+      const opacity = Math.sin(Math.PI * shootingStar.life / shootingStar.duration);
+      const tail = context.createLinearGradient(
+        shootingStar.x - shootingStar.vx * 11,
+        shootingStar.y - shootingStar.vy * 11,
+        shootingStar.x,
+        shootingStar.y
+      );
+      tail.addColorStop(0, "rgba(255, 190, 230, 0)");
+      tail.addColorStop(1, `rgba(255, 226, 249, ${opacity})`);
+      context.beginPath();
+      context.moveTo(shootingStar.x - shootingStar.vx * 11, shootingStar.y - shootingStar.vy * 11);
+      context.lineTo(shootingStar.x, shootingStar.y);
+      context.strokeStyle = tail;
+      context.lineWidth = 2;
+      context.stroke();
+      if (shootingStar.life >= shootingStar.duration) shootingStars.splice(index, 1);
+    }
+  }
+
+  function animate(time) {
+    draw(time);
+    animationFrame = window.requestAnimationFrame(animate);
+  }
+
+  resize();
+  window.addEventListener("resize", resize);
+  if (!reducedMotion) {
+    animationFrame = window.requestAnimationFrame(animate);
+    document.addEventListener("visibilitychange", () => {
+      window.cancelAnimationFrame(animationFrame);
+      if (!document.hidden) animationFrame = window.requestAnimationFrame(animate);
+    });
+  }
 }
 
 const field = document.getElementById("sparkleField");
@@ -213,5 +379,26 @@ for (let i = 0; i < 28; i++) {
   field.appendChild(dot);
 }
 
-launchBalloons();
+const revealItems = document.querySelectorAll(".reveal-on-scroll");
+if ("IntersectionObserver" in window) {
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.14 });
+  revealItems.forEach((item) => revealObserver.observe(item));
+} else {
+  revealItems.forEach((item) => item.classList.add("is-visible"));
+}
+
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+startAnimatedBackdrop();
+launchBalloons(prefersReducedMotion ? 12 : 20);
+if (!prefersReducedMotion) {
+  window.setInterval(() => launchBalloons(5), 7500);
+  burstConfetti(55);
+}
 tryAutoplayBirthdaySong();
