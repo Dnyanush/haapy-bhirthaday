@@ -25,6 +25,10 @@ const candleBirthdayDialog = document.getElementById("candleBirthdayDialog");
 const closeCandleBirthdayButton = document.getElementById("closeCandleBirthdayButton");
 const surpriseDialog = document.getElementById("surpriseDialog");
 const surpriseMessage = document.getElementById("surpriseMessage");
+const giftCodeDialog = document.getElementById("giftCodeDialog");
+const giftCode = document.querySelector(".gift-code").textContent.trim();
+const copyGiftCodeButton = document.getElementById("copyGiftCodeButton");
+const copyGiftCodeLabel = document.getElementById("copyGiftCodeLabel");
 let toastTimer;
 let isMusicOn = false;
 let surpriseIndex = -1;
@@ -246,6 +250,44 @@ surpriseDialog.addEventListener("click", (event) => {
   if (event.target === surpriseDialog) surpriseDialog.close();
 });
 
+const openGiftButton = document.getElementById("openGiftButton");
+openGiftButton.addEventListener("click", () => {
+  if (openGiftButton.classList.contains("is-opening")) return;
+  if (openGiftButton.classList.contains("is-open")) {
+    giftCodeDialog.showModal();
+    return;
+  }
+
+  const openingDuration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 760;
+  openGiftButton.classList.add("is-opening");
+  openGiftButton.disabled = true;
+  window.setTimeout(() => {
+    openGiftButton.classList.remove("is-opening");
+    openGiftButton.classList.add("is-open");
+    openGiftButton.disabled = false;
+    giftCodeDialog.showModal();
+    burstConfetti(45);
+  }, openingDuration);
+});
+document.getElementById("closeGiftCode").addEventListener("click", () => giftCodeDialog.close());
+giftCodeDialog.addEventListener("click", (event) => {
+  if (event.target === giftCodeDialog) giftCodeDialog.close();
+});
+copyGiftCodeButton.addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(giftCode);
+    copyGiftCodeLabel.textContent = "Copied!";
+    copyGiftCodeButton.classList.add("is-copied");
+    showToast("Gift code copied to clipboard!");
+    window.setTimeout(() => {
+      copyGiftCodeLabel.textContent = "Copy gift code";
+      copyGiftCodeButton.classList.remove("is-copied");
+    }, 2200);
+  } catch {
+    showToast("Couldn't copy automatically. Please select and copy the gift code.");
+  }
+});
+
 musicButton.addEventListener("click", toggleMusic);
 
 function launchBalloons(count = 18) {
@@ -308,7 +350,8 @@ function startAnimatedBackdrop() {
   if (!context) return;
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const stars = Array.from({ length: 95 }, () => ({
+  const starCount = window.innerWidth < 650 ? 36 : 65;
+  const stars = Array.from({ length: starCount }, () => ({
     x: Math.random(),
     y: Math.random(),
     radius: 0.4 + Math.random() * 1.4,
@@ -319,6 +362,7 @@ function startAnimatedBackdrop() {
   }));
   const shootingStars = [];
   let animationFrame;
+  let lastFrameTime = 0;
   let lastShootingStar = 0;
   let width = 0;
   let height = 0;
@@ -418,7 +462,10 @@ function startAnimatedBackdrop() {
   }
 
   function animate(time) {
-    draw(time);
+    if (time - lastFrameTime >= 1000 / 30) {
+      draw(time);
+      lastFrameTime = time;
+    }
     animationFrame = window.requestAnimationFrame(animate);
   }
 
@@ -461,9 +508,10 @@ if ("IntersectionObserver" in window) {
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 startAnimatedBackdrop();
-launchBalloons(prefersReducedMotion ? 12 : 20);
+launchBalloons(prefersReducedMotion ? 6 : 10);
 if (!prefersReducedMotion) {
-  window.setInterval(() => launchBalloons(5), 7500);
-  burstConfetti(55);
+  window.setInterval(() => {
+    if (!document.hidden) launchBalloons(3);
+  }, 10000);
 }
 tryAutoplayBirthdaySong();

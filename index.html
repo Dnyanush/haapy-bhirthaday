@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Happy Birthday, Khushaboo ji! ✨</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="image" href="birthday-background.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -12,6 +15,34 @@
   <div class="ambient ambient-one"></div>
   <div class="ambient ambient-two"></div>
   <div class="sparkle-field" id="sparkleField" aria-hidden="true"></div>
+
+  <div class="flower-bouquet flower-left" aria-hidden="true">
+    <span class="flower-stem"></span>
+    <span class="flower-leaf leaf-1"></span>
+    <span class="flower-leaf leaf-2"></span>
+    <span class="flower-center"></span>
+    <span class="flower-petal petal-1"></span>
+    <span class="flower-petal petal-2"></span>
+    <span class="flower-petal petal-3"></span>
+    <span class="flower-petal petal-4"></span>
+    <span class="flower-petal petal-5"></span>
+    <span class="flower-petal petal-6"></span>
+    <span class="flower-petal petal-7"></span>
+  </div>
+
+  <div class="flower-bouquet flower-right" aria-hidden="true">
+    <span class="flower-stem"></span>
+    <span class="flower-leaf leaf-1"></span>
+    <span class="flower-leaf leaf-2"></span>
+    <span class="flower-center"></span>
+    <span class="flower-petal petal-1"></span>
+    <span class="flower-petal petal-2"></span>
+    <span class="flower-petal petal-3"></span>
+    <span class="flower-petal petal-4"></span>
+    <span class="flower-petal petal-5"></span>
+    <span class="flower-petal petal-6"></span>
+    <span class="flower-petal petal-7"></span>
+  </div>
 
   <header class="topbar">
     <div class="brand"><span class="brand-star">✦</span> A LITTLE MAGIC FOR YOU</div>
@@ -89,6 +120,20 @@
       </div>
     </section>
 
+    <section class="gift-reveal reveal-on-scroll" aria-labelledby="giftTitle">
+      <p class="section-kicker">A LITTLE SOMETHING FOR YOU</p>
+      <h2 id="giftTitle">Your birthday <span class="gradient-text">gift is waiting.</span></h2>
+      <button class="gift-box-button" id="openGiftButton" type="button" aria-label="Open your birthday gift">
+        <span class="gift-box" aria-hidden="true">
+          <span class="gift-box-lid"></span>
+          <span class="gift-box-body"></span>
+          <span class="gift-box-ribbon"></span>
+          <span class="gift-box-bow"></span>
+        </span>
+        <span class="gift-box-prompt">Tap to open your gift ✨</span>
+      </button>
+    </section>
+
   </main>
 
   <footer class="reveal-on-scroll">MADE WITH <span>♥</span> FOR MY FAVOURITE PERSON · HAPPY BIRTHDAY</footer>
@@ -109,6 +154,18 @@
     <h2 id="surpriseTitle">For someone <span class="gradient-text">one of a kind.</span></h2>
     <p class="surprise-message" id="surpriseMessage" aria-live="polite"></p>
     <button class="wish-button" id="anotherSurprise"><span>Another little surprise</span><b>✦</b></button>
+  </dialog>
+  <dialog class="surprise-dialog gift-code-dialog" id="giftCodeDialog" aria-labelledby="giftCodeTitle">
+    <button class="dialog-close" id="closeGiftCode" aria-label="Close gift">×</button>
+    <div class="surprise-gift" aria-hidden="true">🎁</div>
+    <p class="section-kicker">YOUR BIRTHDAY GIFT</p>
+    <h2 id="giftCodeTitle">A little surprise <span class="gradient-text">just for you!</span></h2>
+    <p class="surprise-message">Here’s your special gift code:</p>
+    <p class="gift-code" aria-label="Gift code CBWZX0549M32A83K">CBWZX0549M32A83K</p>
+    <button class="copy-gift-code" id="copyGiftCodeButton" type="button">
+      <span class="copy-gift-code-icon" aria-hidden="true">▢</span>
+      <span id="copyGiftCodeLabel">Copy gift code</span>
+    </button>
   </dialog>
   <script src="script.js"></script>
 </body>
